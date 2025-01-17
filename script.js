@@ -68,7 +68,7 @@ let textAnswer;
 
     // Кнопка заново
     document.getElementById('btnRetry').addEventListener('click', async function () {
-        debugger
+        // debugger
         minValue = '';
         maxValue = '';
         answerNumber = '';
@@ -117,7 +117,7 @@ let textAnswer;
 
     // Кнопка меньше
     document.getElementById('btnLess').addEventListener('click', () => {
-        // debugger
+        debugger
 
         if (!gameRun) {
             showBootstrapAlert('Игра уже завершена. Нажмите "Заново", чтобы начать новую.', 'info');
@@ -126,6 +126,16 @@ let textAnswer;
 
         if (typeof answerNumber === 'undefined' || isNaN(answerNumber) || answerNumber === '') {
             showBootstrapAlert('Вы отменили ввод значений, начните игру заново', 'danger'); 
+            return;
+        }
+
+        if (maxValue - minValue <= 1) {
+            const phraseRandom = Math.round(Math.random());
+            const answerPhrase = (phraseRandom === 1) ?
+                `Вы загадили не правильное число! \n\u{1F914}` :
+                `Я сдаюсь.. \n\u{1F92F}`;
+            answerField.innerText = answerPhrase;
+            gameRun = false;
             return;
         }
 
@@ -236,7 +246,7 @@ let textAnswer;
                 let value = Number(newPromptInput.value.trim()) || 0; // короткий цикл операций дизъюнкции.
                 value = value > 999 ? 999 : value < -999 ? -999 : value;
                          
-                if(Number(value) && !isNaN(value)) {
+                if(typeof value === 'number' && !isNaN(value)) {
                     promptContainer.style.display = 'none';
                     document.body.classList.remove('no-scroll');
                     mainContent.classList.remove('blur-background');
@@ -275,6 +285,10 @@ let textAnswer;
                            "девятнадцать"];
             const tens = ["", "", "двадцать", "тридцать", "сорок", "пятьдесят", 
                           "шестьдесят", "семьдесят", "восемьдесят", "девяносто"];
+
+             if (n < 0) {
+                return "минус " + numberToWords(-n); // Берем модуль числа и рекурсивно обрабатываем
+            }              
             
             if (n < 20) {
                 return units[n];
